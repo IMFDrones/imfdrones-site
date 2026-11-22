@@ -1,0 +1,1576 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="IMF Drones is a DC-based drone kit company. Take the quiz to find your kit, browse CAD files and see the school curriculum.">
+<style>:root{color-scheme:light}html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>IMF Drones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: one page, three views. Landing = dark hero, about, offer, build levels, partner band. Quiz = tabbed (quick kit quiz / in-depth assembly quiz). CAD hub = drone-type tabs, part cards, build list. */
+:root {
+  --bg: #e9ebeb;
+  --band: #26292b;
+  --band-fg: #f4f5f3;
+  --surface: #ffffff;
+  --fg: #1b1e20;
+  --muted: #5b6266;
+  --line: #bcc3c6;
+  --accent: #d9430d;
+  --accent-fg: #ffffff;
+  --signal: #00757a;
+  --on-band-signal: #3fe3e0;
+  --ok: #1b7a43;
+  --font-display: "Unbounded", "Arial Black", sans-serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1c1e20;
+    --band: #141618;
+    --band-fg: #f4f5f3;
+    --surface: #2a2d30;
+    --fg: #eef0ee;
+    --muted: #a3aaae;
+    --line: #4a5155;
+    --accent: #ff5a1f;
+    --accent-fg: #14110f;
+    --signal: #3fe3e0;
+    --on-band-signal: #3fe3e0;
+    --ok: #5fd68f;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1c1e20;
+  --band: #141618;
+  --band-fg: #f4f5f3;
+  --surface: #2a2d30;
+  --fg: #eef0ee;
+  --muted: #a3aaae;
+  --line: #4a5155;
+  --accent: #ff5a1f;
+  --accent-fg: #14110f;
+  --signal: #3fe3e0;
+  --on-band-signal: #3fe3e0;
+  --ok: #5fd68f;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.55; }
+h1, h2, h3, h4 { text-wrap: balance; }
+.wrap { max-width: 1100px; margin: 0 auto; padding-inline: 16px; }
+.eyebrow { font-family: var(--font-mono); font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 12px; color: var(--signal); }
+.on-band { background: var(--band); color: var(--band-fg); }
+.on-band .eyebrow { color: var(--on-band-signal); }
+
+/* Buttons */
+button, .btn {
+  font-family: var(--font-display); font-weight: 500; font-size: .86rem; letter-spacing: .08em; text-transform: uppercase;
+  background: var(--accent); color: var(--accent-fg); border: 0; border-radius: 8px; padding: 16px 36px; cursor: pointer;
+}
+button:hover { filter: brightness(1.08); }
+button:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; }
+.on-band button:focus-visible { outline-color: var(--on-band-signal); }
+button.ghost { background: transparent; color: inherit; border: 1px solid color-mix(in srgb, currentColor 40%, transparent); padding: 14px 26px; }
+button.small { padding: 10px 18px; font-size: .74rem; }
+
+/* Top bar */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px 16px; padding-block: 18px; flex-wrap: wrap; }
+.brand { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; letter-spacing: .02em; }
+.brand span { color: var(--accent); }
+.topnav { display: flex; align-items: center; gap: 4px 8px; flex-wrap: wrap; }
+.topnav .link { background: none; color: inherit; border: 0; padding: 10px 10px; font-family: var(--font-body); font-weight: 500; font-size: .92rem; letter-spacing: 0; text-transform: none; }
+.topnav .link:hover { color: var(--on-band-signal); filter: none; }
+
+/* Landing: hero */
+.hero { padding-block: 24px 72px; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: 40px; align-items: center; }
+.hero h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(2rem, 5.2vw, 3.6rem); line-height: 1.08; margin: 0 0 20px; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero .lede { max-width: 54ch; margin: 0 0 28px; opacity: .88; font-size: 1.05rem; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+.droneart { width: 100%; max-width: 380px; justify-self: center; height: auto; }
+.tagline-strip { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 28px; font-family: var(--font-mono); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; opacity: .75; }
+
+/* Sections */
+section.block { padding-block: 64px; }
+.block h2, .page-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.4rem, 3.6vw, 2.1rem); line-height: 1.18; margin: 0 0 16px; }
+.block .intro { max-width: 64ch; margin: 0 0 32px; color: var(--muted); }
+.on-band .intro { color: var(--band-fg); opacity: .82; }
+.about-text { max-width: 66ch; font-size: 1.08rem; margin: 0; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 24px; min-width: 0; }
+.card h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.02rem; margin: 0 0 8px; line-height: 1.3; }
+.card p { margin: 0; color: var(--muted); }
+.on-band .card { background: color-mix(in srgb, var(--band-fg) 7%, transparent); border-color: color-mix(in srgb, var(--band-fg) 24%, transparent); }
+.on-band .card p { color: var(--band-fg); opacity: .8; }
+.partner-cta { margin-top: 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.partner-cta p { margin: 0; opacity: .85; max-width: 52ch; }
+footer.site { padding-block: 28px; font-size: .9rem; color: var(--muted); }
+footer.site .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+
+/* Build levels */
+.levels { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 16px; align-items: stretch; }
+.level { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 26px 24px; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+.level .tier { font-family: var(--font-mono); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin: 0; }
+.level h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; line-height: 1.2; margin: 0; }
+.level .sum { margin: 0; color: var(--muted); }
+.level h4 { font-family: var(--font-mono); font-weight: 500; font-size: .76rem; letter-spacing: .1em; text-transform: uppercase; margin: 6px 0 0; color: var(--signal); }
+.level ul { margin: 0; padding-left: 1.15em; display: grid; gap: 6px; }
+.level li { padding-left: 2px; }
+.level .skill { margin: 0; font-size: .95rem; padding-top: 12px; border-top: 1px solid var(--line); }
+.every { margin-top: 16px; padding: 18px 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.every p { margin: 0; }
+.every strong { font-family: var(--font-mono); font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--signal); margin-right: 8px; }
+.compare-title { font-family: var(--font-display); font-weight: 500; font-size: 1.2rem; margin: 48px 0 16px; }
+.table-scroll { position: relative; overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: .95rem; }
+th, td { text-align: left; vertical-align: top; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+tbody tr:last-child th, tbody tr:last-child td { border-bottom: 0; }
+thead th { font-family: var(--font-mono); font-weight: 500; font-size: .76rem; letter-spacing: .1em; text-transform: uppercase; color: var(--signal); }
+tbody th { font-weight: 700; width: 20%; }
+.after-table { margin-top: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.after-table p { margin: 0; max-width: 56ch; color: var(--muted); }
+
+/* Quiz + hub page headers */
+.pagehead { text-align: center; padding-block: 28px 44px; padding-inline: 16px; }
+.pagehead .topbar { text-align: left; max-width: 1100px; margin: 0 auto 20px; padding-inline: 0; }
+.pagehead h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.9rem, 6vw, 3.4rem); line-height: 1.1; margin: 0 0 16px; }
+.pagehead p.sub { margin: 0 auto; max-width: 56ch; opacity: .82; }
+main.page { max-width: 1100px; margin: 0 auto; padding-block: 36px 72px; padding-inline: 16px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 28px; }
+.tab { background: transparent; color: var(--fg); border: 1px solid var(--line); font-size: .76rem; padding: 12px 18px; }
+.tab[aria-selected="true"], .tab[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.section-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.4rem, 3.5vw, 2rem); margin: 0 0 8px; }
+.panel-intro { margin: 0 0 8px; max-width: 64ch; color: var(--muted); }
+.progress { font-family: var(--font-mono); font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 24px; }
+
+/* Quiz cards: legend sits inside the card so the border stays one unbroken line; cards in a row share one height */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; align-items: stretch; }
+fieldset { min-width: 0; margin: 0; padding: 20px 18px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+fieldset.missing { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+legend { float: left; width: 100%; padding: 0; margin: 0 0 10px; font-weight: 700; font-size: .98rem; line-height: 1.3; }
+legend + * { clear: both; }
+.hint { margin: -4px 0 6px; font-size: .85rem; color: var(--muted); clear: both; }
+.opt { display: flex; gap: 10px; align-items: flex-start; padding: 9px 8px; border-radius: 8px; cursor: pointer; }
+.opt:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.opt input { margin-top: 4px; accent-color: var(--accent); width: 16px; height: 16px; flex: none; }
+.opt:has(input:checked) { background: color-mix(in srgb, var(--accent) 16%, transparent); }
+.opt:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 1px; }
+.opt span { min-width: 0; overflow-wrap: anywhere; }
+.actions { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 32px; }
+.error { color: var(--accent); font-weight: 500; min-height: 1.5em; margin: 0; text-align: center; }
+
+/* Results */
+.result { margin-top: 40px; background: var(--band); color: var(--band-fg); border-radius: 18px; padding: 32px clamp(18px, 4vw, 40px); border: 1px solid color-mix(in srgb, var(--band-fg) 20%, transparent); }
+.result .label { font-family: var(--font-mono); font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: var(--on-band-signal); margin: 0 0 8px; }
+.result h2 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.6rem, 5vw, 2.6rem); line-height: 1.12; margin: 0 0 12px; }
+.result .lede { margin: 0 0 24px; max-width: 64ch; opacity: .88; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 24px; padding: 0; list-style: none; }
+.chips li { font-family: var(--font-mono); font-size: .78rem; letter-spacing: .04em; border: 1px solid color-mix(in srgb, var(--band-fg) 30%, transparent); border-radius: 999px; padding: 5px 12px; }
+.why { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); margin-bottom: 24px; }
+.why > div { min-width: 0; }
+.why h3 { font-family: var(--font-mono); font-weight: 500; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; margin: 0 0 8px; color: var(--on-band-signal); }
+.why p { margin: 0; opacity: .9; }
+.checklist { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.checklist li { display: flex; gap: 10px; align-items: flex-start; }
+.checklist .st { flex: none; min-width: 58px; text-align: center; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; border-radius: 999px; padding: 3px 8px; border: 1px solid currentColor; margin-top: 2px; }
+.st.have { color: #5fd68f; }
+.st.part { color: #ffc24a; }
+.st.need { color: #ff7a4d; }
+.result .actions { align-items: flex-start; flex-direction: row; flex-wrap: wrap; margin-top: 8px; }
+
+/* CAD hub */
+.hub { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 24px; align-items: start; }
+.parts { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; align-items: stretch; }
+.part { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.part h3 { font-family: var(--font-display); font-weight: 500; font-size: .98rem; line-height: 1.3; margin: 0; }
+.part p { margin: 0; color: var(--muted); flex: 1; }
+.part .meta { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; color: var(--muted); }
+.pill.kind { color: var(--signal); border-color: var(--signal); }
+.part .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+.part .file { font-size: .85rem; color: var(--muted); }
+.part a.file { color: var(--signal); }
+.part button { padding: 10px 16px; font-size: .72rem; }
+.part button[aria-pressed="true"] { background: transparent; color: var(--fg); border: 1px solid var(--accent); }
+.buildlist { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; position: sticky; top: 16px; }
+.buildlist h3 { font-family: var(--font-display); font-weight: 500; font-size: 1rem; margin: 0 0 12px; }
+.buildlist ul { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 8px; }
+.buildlist li { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+.buildlist li span { min-width: 0; overflow-wrap: anywhere; }
+.buildlist li small { display: block; color: var(--muted); }
+.buildlist .empty { color: var(--muted); margin: 0 0 16px; }
+.buildlist li button { padding: 4px 10px; font-size: .66rem; flex: none; }
+.buildlist .btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.buildlist .btns button { padding: 10px 14px; font-size: .7rem; }
+.copynote { font-size: .85rem; color: var(--muted); margin: 10px 0 0; min-height: 1.3em; }
+
+/* Pricing */
+.price { margin: 0; font-family: var(--font-mono); font-size: .82rem; letter-spacing: .04em; color: var(--muted); }
+.price strong { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; color: var(--fg); margin: 0 6px 0 4px; letter-spacing: 0; }
+.price-table td strong { font-family: var(--font-display); font-weight: 500; font-size: 1.05rem; }
+.price-table { min-width: 560px; }
+.price-table thead th:not(:first-child), .price-table td { width: 26%; }
+.cadbox { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px; padding: 20px 24px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; margin-top: 24px; }
+.cadbox h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.05rem; margin: 0 0 4px; }
+.cadbox h3 .amt { color: var(--accent); margin-left: 6px; }
+.cadbox p { margin: 0; color: var(--muted); max-width: 56ch; }
+.cadbox.top { margin: 0 0 24px; }
+.bundles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.bundle { border: 1px solid color-mix(in srgb, var(--band-fg) 24%, transparent); border-radius: 14px; padding: 24px; background: color-mix(in srgb, var(--band-fg) 7%, transparent); display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.bundle .size { font-family: var(--font-mono); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--on-band-signal); margin: 0; }
+.bundle .amt { font-family: var(--font-display); font-weight: 700; font-size: 2rem; line-height: 1.1; margin: 0; }
+.bundle .per { margin: 0; font-weight: 700; }
+.bundle .inc { margin: 0; opacity: .8; }
+.pricebox { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; margin: 0 0 24px; padding: 16px 20px; border: 1px solid color-mix(in srgb, var(--band-fg) 28%, transparent); border-radius: 12px; }
+.pricebox .amt { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.8rem, 5vw, 2.4rem); line-height: 1.1; }
+.pricebox .pnote { opacity: .85; max-width: 60ch; }
+sup.c { font-size: .55em; font-weight: 700; line-height: 0; vertical-align: super; margin-left: .08em; letter-spacing: 0; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Curriculum template */
+.currhead { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
+.currtitle { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.3rem, 3.4vw, 1.9rem); line-height: 1.2; margin: 0 0 10px; }
+.goal { max-width: 66ch; margin: 0 0 24px; font-size: 1.05rem; }
+.strands { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 16px; align-items: stretch; }
+.strand { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; min-width: 0; }
+.strand h3 { font-family: var(--font-mono); font-weight: 500; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--signal); margin: 0 0 10px; }
+.strand ul { margin: 0; padding-left: 1.15em; display: grid; gap: 7px; }
+.currnote { margin-top: 28px; max-width: 70ch; color: var(--muted); }
+
+@media (max-width: 860px) {
+  .hub { grid-template-columns: minmax(0, 1fr); }
+  .buildlist { position: static; }
+}
+@media (max-width: 760px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr); }
+  .droneart { max-width: 260px; order: -1; }
+  section.block { padding-block: 48px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .result { animation: rise .35s ease-out; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .rotor { transform-box: fill-box; transform-origin: center; animation: spin 2.4s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ LANDING VIEW ============ -->
+<div id="landing">
+  <div class="on-band">
+    <div class="wrap">
+      <div class="topbar">
+        <div class="brand">IMF <span>Drones</span></div>
+        <nav class="topnav" aria-label="Site">
+          <button type="button" class="link" data-scroll="about">About</button>
+          <button type="button" class="link" data-scroll="levels">Build levels</button>
+          <button type="button" class="link" data-scroll="pricing">Pricing</button>
+          <button type="button" class="link" data-go="curriculum">Curriculum</button>
+          <button type="button" class="link" data-go="cad">CAD hub</button>
+          <button type="button" class="link" data-scroll="partners">Schools &amp; partners</button>
+          <button type="button" class="small" data-go="quiz">Take the quiz</button>
+        </nav>
+      </div>
+    </div>
+
+    <header class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow">Drone kits · Washington, DC</p>
+          <h1>Become a drone pilot <em>and</em> an engineer.</h1>
+          <p class="lede">IMF Drones is a DC-based drone kit company. We build kits for new flyers and professionals alike, and we shape the engineering experience around you, whatever your background or workshop.</p>
+          <div class="cta-row">
+            <button type="button" data-go="quiz">Take the quiz</button>
+            <button type="button" class="ghost" data-scroll="levels">See the build levels</button>
+          </div>
+          <div class="tagline-strip"><span>Five questions</span><span>One kit that fits you</span></div>
+        </div>
+
+        <svg class="droneart" viewBox="0 0 320 320" role="img" aria-label="Top-down drawing of a quad-copter drone">
+          <g fill="none" stroke="#f4f5f3" stroke-width="6" stroke-linecap="round" opacity=".9">
+            <line x1="104" y1="104" x2="216" y2="216"/>
+            <line x1="216" y1="104" x2="104" y2="216"/>
+          </g>
+          <g fill="#141618" stroke="#3fe3e0" stroke-width="3">
+            <circle cx="70" cy="70" r="46"/><circle cx="250" cy="70" r="46"/>
+            <circle cx="70" cy="250" r="46"/><circle cx="250" cy="250" r="46"/>
+          </g>
+          <g stroke="#f4f5f3" stroke-width="5" stroke-linecap="round">
+            <g class="rotor"><line x1="38" y1="70" x2="102" y2="70"/></g>
+            <g class="rotor"><line x1="218" y1="70" x2="282" y2="70"/></g>
+            <g class="rotor"><line x1="38" y1="250" x2="102" y2="250"/></g>
+            <g class="rotor"><line x1="218" y1="250" x2="282" y2="250"/></g>
+          </g>
+          <g fill="#26292b" stroke="#f4f5f3" stroke-width="4">
+            <rect x="124" y="124" width="72" height="72" rx="14"/>
+          </g>
+          <circle cx="160" cy="160" r="12" fill="#ff5a1f"/>
+          <rect x="146" y="124" width="28" height="9" rx="4" fill="#ff5a1f"/>
+        </svg>
+      </div>
+    </header>
+  </div>
+
+  <section class="block" id="about">
+    <div class="wrap">
+      <p class="eyebrow">About IMF Drones</p>
+      <h2>Flying is the start. Engineering is the point.</h2>
+      <p class="about-text">IMF Drones is a DC-based drone kit company that seeks to provide drones and drone kits to new flyers and professionals alike. Beyond flying drones, we want to curate the engineering experience for our pilots, regardless of your previous experience with engineering or your current engineering infrastructure. Become a drone pilot and an engineer today when you buy your first kit and/or enroll in a class.</p>
+    </div>
+  </section>
+
+  <section class="block" id="offer" style="padding-top:0">
+    <div class="wrap">
+      <p class="eyebrow">Two ways in</p>
+      <h2>Start with a kit, a class, or both.</h2>
+      <p class="intro">Not sure where you fit? The quiz looks at your drone type, building experience and tool access, then points you to a kit.</p>
+      <div class="cards">
+        <article class="card"><h3>Drone kits</h3><p>Quad-copter, fixed wing and VTOL builds for pilots at every level, from a first drone to a professional project.</p></article>
+        <article class="card"><h3>Classes</h3><p>Enroll to learn the engineering behind the build, with support that meets you at your level.</p></article>
+        <article class="card"><h3>Any starting point</h3><p>Three build levels let you choose how much you assemble, from snap-fit to a full build from a CAD file.</p></article>
+      </div>
+      <div class="cta-row" style="margin-top:28px"><button type="button" data-go="quiz">Take the quiz</button></div>
+    </div>
+  </section>
+
+  <section class="block" id="levels" style="padding-top:0">
+    <div class="wrap">
+      <p class="eyebrow">Build levels</p>
+      <h2>Three levels. You choose how much you build.</h2>
+      <p class="intro">Every level ends with a drone you assembled yourself. What changes is how much arrives ready-made and which tools you need on your bench.</p>
+
+      <div class="levels">
+        <article class="level">
+          <p class="tier">Level 1 · Starter</p>
+          <h3>Snap-fit and plug and play</h3>
+          <p class="price">From<strong data-price-from="0"></strong>quad-copter</p>
+          <p class="sum">The quickest route from box to sky. Most of the chassis snaps together, a few screws hold the electronics, and every electrical connection is a plug.</p>
+          <h4>What you do</h4>
+          <ul>
+            <li>Snap the chassis together.</li>
+            <li>Screw the flight controller to the ESC and to the drone.</li>
+            <li>Screw the rotors onto the drone.</li>
+            <li>Plug the battery into the ESC with its easy-connect plug.</li>
+            <li>Plug the rotors into the ESC.</li>
+            <li>Optionally plug in an FPV camera, a VTX and an ELRS receiver, which use the same plug-and-play connectors.</li>
+          </ul>
+          <h4>What you need</h4>
+          <ul>
+            <li>A precision screwdriver set.</li>
+          </ul>
+          <p class="skill"><strong>Skill:</strong> none. No soldering.</p>
+        </article>
+
+        <article class="level">
+          <p class="tier">Level 2 · Builder</p>
+          <h3>Pre-made chassis and light soldering</h3>
+          <p class="price">From<strong data-price-from="1"></strong>quad-copter</p>
+          <p class="sum">The chassis parts arrive ready-made. You take on your first soldering jobs: the plug-and-play joints that connect to the ESC, and the easy joints on the flight controller.</p>
+          <h4>What you do</h4>
+          <ul>
+            <li>Fit the pre-made chassis parts together.</li>
+            <li>Solder the plug-and-play joints to the ESC.</li>
+            <li>Solder the FPV camera or VTX to the flight controller at the easy solder points.</li>
+            <li>Solder the ELRS receiver to the flight controller.</li>
+            <li>Finish the remaining mounting and connections.</li>
+          </ul>
+          <h4>What you need, on top of Level 1</h4>
+          <ul>
+            <li>A soldering iron.</li>
+            <li>Solder, flux and a helping-hands or board holder.</li>
+            <li>Wire strippers and cutters.</li>
+            <li>Heat shrink for insulating joints.</li>
+            <li>A multimeter is recommended.</li>
+          </ul>
+          <p class="skill"><strong>Skill:</strong> a little soldering practice. A few practice joints on scrap wire is enough.</p>
+        </article>
+
+        <article class="level">
+          <p class="tier">Level 3 · Pro</p>
+          <h3>Components, wires and a CAD file</h3>
+          <p class="price">From<strong data-price-from="2"></strong>quad-copter, CAD file included</p>
+          <p class="sum">You receive the components and wires with nothing soldered to any board, and no chassis. In its place you get a CAD file, plus extra parts you can add from the CAD hub to match your preferences.</p>
+          <h4>What you do</h4>
+          <ul>
+            <li>Print the chassis from the CAD file, on your own printer or through a school, library or print service.</li>
+            <li>Choose extra parts from the CAD hub for your drone type.</li>
+            <li>Solder or crimp every connection yourself: battery lead, rotors to the ESC, FPV camera or VTX and ELRS receiver to the flight controller.</li>
+            <li>Test each connection, then configure and tune.</li>
+          </ul>
+          <h4>What you need, on top of Level 2</h4>
+          <ul>
+            <li>A temperature-controlled soldering station.</li>
+            <li>A crimping tool.</li>
+            <li>A 3D printer or access to one.</li>
+            <li>A multimeter, plus a hobby knife and small files for cleaning printed parts.</li>
+          </ul>
+          <p class="skill"><strong>Skill:</strong> comfortable soldering, including small pads, and reading a wiring diagram.</p>
+        </article>
+      </div>
+
+      <div class="every">
+        <p><strong>Every level</strong>A computer to configure the flight controller and radio, and a LiPo balance charger with a fire-safe bag for charging.</p>
+      </div>
+
+      <h3 class="compare-title">Side by side</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th scope="col">Part</th><th scope="col">Starter</th><th scope="col">Builder</th><th scope="col">Pro</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Chassis</th><td>Mostly snap-fit</td><td>Pre-made parts</td><td>None. A CAD file you print, plus extra parts from the CAD hub</td></tr>
+            <tr><th scope="row">Flight controller and rotors</th><td>Screwed to the drone and ESC</td><td>Mounted with the pre-made chassis</td><td>Mounted to the chassis you print</td></tr>
+            <tr><th scope="row">Battery to ESC</th><td>Plug-and-play connector</td><td>Connector soldered to the ESC</td><td>You solder or crimp the lead yourself</td></tr>
+            <tr><th scope="row">Rotors to ESC</th><td>Plug-and-play connectors</td><td>Plug-and-play joints soldered to the ESC</td><td>You solder each wire yourself</td></tr>
+            <tr><th scope="row">FPV camera and VTX (optional)</th><td>Plug and play</td><td>Soldered to the flight controller at easy points</td><td>Wired and soldered by you</td></tr>
+            <tr><th scope="row">ELRS receiver (optional)</th><td>Plug and play</td><td>Soldered to the flight controller</td><td>Wired and soldered by you</td></tr>
+            <tr><th scope="row">Soldering</th><td>None</td><td>Light</td><td>Full build, nothing pre-soldered</td></tr>
+            <tr><th scope="row">Main extra tools</th><td>Precision screwdrivers</td><td>Soldering iron, solder, strippers</td><td>Temperature-controlled station, crimper, 3D printer</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="after-table">
+        <button type="button" data-go="assembly">Take the in-depth assembly quiz</button>
+        <button type="button" class="ghost" data-go="cad">Browse the CAD hub</button>
+        <p>Not sure which level matches your tools? The in-depth quiz asks what you have on your bench and recommends a level.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="pricing" style="padding-top:0">
+    <div class="wrap">
+      <p class="eyebrow">Pricing</p>
+      <h2>Do more of the building, pay less.</h2>
+      <p class="intro">Each level hands you more of the work, so it costs less. Fixed wing and VTOL aircraft cost more than quad-copters because they use more complex airframes and extra parts. All prices are in US dollars.</p>
+      <div class="table-scroll">
+        <table class="price-table" id="priceTable">
+          <thead>
+            <tr><th scope="col">Drone type</th><th scope="col">Level 1 · Starter</th><th scope="col">Level 2 · Builder</th><th scope="col">Level 3 · Pro</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="cadbox">
+        <div>
+          <h3>CAD file on its own<span class="amt" data-cad-price></span></h3>
+          <p>The airframe design for your drone type, ready to print. It is included with every Level 3 Pro kit.</p>
+        </div>
+        <button type="button" class="ghost" data-go="cad" style="color:var(--fg)">Browse CAD files</button>
+      </div>
+      <div class="after-table">
+        <button type="button" data-go="quiz">Take the quiz to get your price</button>
+        <p>The quiz recommends a kit and shows its exact price for your drone type and level.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block on-band" id="partners">
+    <div class="wrap">
+      <p class="eyebrow">Schools &amp; STEM organizations · DC, Maryland, Virginia</p>
+      <h2>Bring hands-on drone engineering to your students.</h2>
+      <p class="intro">We are looking to partner with schools and STEM enrichment organizations across the DMV. Students get to build the aircraft they fly, which makes engineering something they can see and test.</p>
+      <div class="cards">
+        <article class="card"><h3>Every skill level, one program</h3><p>The three build levels let a mixed group work side by side, from first-time builders to experienced students.</p></article>
+        <article class="card"><h3>No lab required</h3><p>Our approach is built for programs with limited engineering infrastructure. We work with the tools and space you have.</p></article>
+        <article class="card"><h3>Local to the DMV</h3><p>As a DC-based company, we can work with programs across the region and shape a partnership around your students.</p></article>
+      </div>
+      <h3 class="compare-title" style="margin-top:40px">School and program bundles</h3>
+      <p class="intro" style="margin-bottom:24px">Every bundle includes a Level 1 Starter quad-copter kit for each drone, plus the curriculum. There is no soldering and no lab required.</p>
+      <div class="bundles" id="bundles"></div>
+      <div class="partner-cta">
+        <button type="button" data-go="curriculum">View the curriculum template</button>
+        <button type="button" class="ghost" data-go="assembly">Try the assembly quiz</button>
+        <p>The curriculum outlines what to cover from 6th grade through college. The quiz shows how we match a program's tools to a build level.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site">
+    <div class="wrap"><span>IMF Drones · Washington, DC</span><span>Drone kits and classes for new flyers and professionals</span></div>
+  </footer>
+</div>
+
+<!-- ============ QUIZ VIEW ============ -->
+<div id="quizView" hidden>
+  <div class="on-band pagehead">
+    <div class="topbar">
+      <div class="brand">IMF <span>Drones</span></div>
+      <nav class="topnav" aria-label="Site">
+        <button type="button" class="link" data-go="landing">Home</button>
+        <button type="button" class="link" data-go="landing" data-then="levels">Build levels</button>
+        <button type="button" class="link" data-go="landing" data-then="pricing">Pricing</button>
+        <button type="button" class="link" data-go="curriculum">Curriculum</button>
+        <button type="button" class="link" data-go="cad">CAD hub</button>
+      </nav>
+    </div>
+    <h1>Your Drone Kit Quiz</h1>
+    <p class="sub">Take this quiz to be one step closer to being a pioneer of the skies.</p>
+  </div>
+
+  <main class="page">
+    <div class="tabs" role="tablist" aria-label="Quizzes">
+      <button type="button" class="tab" role="tab" id="tab-quiz" aria-selected="true" aria-controls="panel-quiz" data-go="quiz">Quick kit quiz · 5 questions</button>
+      <button type="button" class="tab" role="tab" id="tab-assembly" aria-selected="false" aria-controls="panel-assembly" data-go="assembly">In-depth assembly quiz · 8 questions</button>
+    </div>
+
+    <!-- Quick quiz -->
+    <div id="panel-quiz" role="tabpanel" aria-labelledby="tab-quiz">
+      <h2 class="section-title">Drone Quiz</h2>
+      <p class="progress" id="progress" aria-live="polite">0 of 5 answered</p>
+
+      <form id="quiz" novalidate>
+        <div class="grid">
+          <fieldset data-q="q1">
+            <legend>Have you ever built a drone before?</legend>
+            <label class="opt" for="q1a"><input type="radio" id="q1a" name="q1" value="yes"><span>Yes</span></label>
+            <label class="opt" for="q1b"><input type="radio" id="q1b" name="q1" value="no"><span>Never in my life</span></label>
+          </fieldset>
+
+          <fieldset data-q="q2">
+            <legend>What type of drone do you want to build?</legend>
+            <label class="opt" for="q2a"><input type="radio" id="q2a" name="q2" value="qc"><span>Quad-Copter (QC)</span></label>
+            <label class="opt" for="q2b"><input type="radio" id="q2b" name="q2" value="fw"><span>Fixed Wing (FW)</span></label>
+            <label class="opt" for="q2c"><input type="radio" id="q2c" name="q2" value="h"><span>Hybrid (H)</span></label>
+            <label class="opt" for="q2d"><input type="radio" id="q2d" name="q2" value="any"><span>Anything that flies</span></label>
+          </fieldset>
+
+          <fieldset data-q="q3">
+            <legend>Have you ever built anything?</legend>
+            <label class="opt" for="q3a"><input type="radio" id="q3a" name="q3" value="bob"><span>I'm Bob the Builder</span></label>
+            <label class="opt" for="q3b"><input type="radio" id="q3b" name="q3" value="dresser"><span>I've put together a dresser or bed frame</span></label>
+            <label class="opt" for="q3c"><input type="radio" id="q3c" name="q3" value="picture"><span>I've hung a picture</span></label>
+            <label class="opt" for="q3d"><input type="radio" id="q3d" name="q3" value="none"><span>What's a screwdriver?</span></label>
+          </fieldset>
+
+          <fieldset data-q="q4">
+            <legend>What does your engineering inventory look like?</legend>
+            <label class="opt" for="q4a"><input type="radio" id="q4a" name="q4" value="peter"><span>I have a Peter Parker setup</span></label>
+            <label class="opt" for="q4b"><input type="radio" id="q4b" name="q4" value="couple"><span>I have a couple of tools</span></label>
+            <label class="opt" for="q4c"><input type="radio" id="q4c" name="q4" value="guy"><span>I know a guy</span></label>
+            <label class="opt" for="q4d"><input type="radio" id="q4d" name="q4" value="place"><span>School or library has what I need</span></label>
+          </fieldset>
+
+          <fieldset data-q="q5">
+            <legend>Do you have access to outside engineering tools?</legend>
+            <label class="opt" for="q5a"><input type="radio" id="q5a" name="q5" value="family"><span>Family or friend</span></label>
+            <label class="opt" for="q5b"><input type="radio" id="q5b" name="q5" value="school"><span>School</span></label>
+            <label class="opt" for="q5c"><input type="radio" id="q5c" name="q5" value="library"><span>Library</span></label>
+            <label class="opt" for="q5d"><input type="radio" id="q5d" name="q5" value="shop"><span>Nearby shop</span></label>
+          </fieldset>
+        </div>
+
+        <div class="actions">
+          <p class="error" id="error" role="alert"></p>
+          <button type="submit" id="submit">Submit</button>
+        </div>
+      </form>
+
+      <section class="result" id="result" hidden aria-live="polite" tabindex="-1">
+        <p class="label">Best kit for you</p>
+        <h2 id="kitName"></h2>
+        <p class="lede" id="kitLede"></p>
+        <div class="pricebox"><span class="amt" id="kitPrice"></span><span class="pnote" id="kitPriceNote"></span></div>
+        <ul class="chips" id="kitChips"></ul>
+        <div class="why">
+          <div><h3>Why this kit</h3><p id="whyText"></p></div>
+          <div><h3>Your tools</h3><p id="toolsText"></p></div>
+        </div>
+        <div class="actions">
+          <button type="button" class="ghost" id="retake">Retake the quiz</button>
+          <button type="button" class="ghost" data-go="landing" data-then="levels">How the levels work</button>
+          <button type="button" class="ghost" data-go="assembly">Take the in-depth quiz</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- In-depth assembly quiz -->
+    <div id="panel-assembly" role="tabpanel" aria-labelledby="tab-assembly" hidden>
+      <h2 class="section-title">Assembly Level Quiz</h2>
+      <p class="panel-intro">Tell us what you have on your bench. We match your tools and experience to a build level: Starter, Builder or Pro.</p>
+      <p class="progress" id="aprogress" aria-live="polite">0 of 8 answered</p>
+
+      <form id="aform" novalidate>
+        <div class="grid" id="agrid"></div>
+        <div class="actions">
+          <p class="error" id="aerror" role="alert"></p>
+          <button type="submit">See my build level</button>
+        </div>
+      </form>
+
+      <section class="result" id="aresult" hidden aria-live="polite" tabindex="-1">
+        <p class="label">Your build level</p>
+        <h2 id="aName"></h2>
+        <p class="lede" id="aLede"></p>
+        <div class="pricebox"><span class="amt" id="aPrice"></span><span class="pnote" id="aPriceNote"></span></div>
+        <ul class="chips" id="aChips"></ul>
+        <div class="why">
+          <div><h3>Needed at every level</h3><ul class="checklist" id="aEvery"></ul></div>
+          <div><h3 id="aHaveTitle">What you already have</h3><ul class="checklist" id="aHave"></ul></div>
+          <div id="aNextBox"><h3 id="aNextTitle">To step up</h3><ul class="checklist" id="aNext"></ul></div>
+        </div>
+        <p class="lede" id="aNotes" style="margin-bottom:24px"></p>
+        <div class="actions">
+          <button type="button" class="ghost" id="aretake">Retake the quiz</button>
+          <button type="button" class="ghost" id="aHub" data-hub="qc">Browse CAD files</button>
+          <button type="button" class="ghost" data-go="landing" data-then="levels">How the levels work</button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<!-- ============ CAD HUB VIEW ============ -->
+<div id="cadView" hidden>
+  <div class="on-band pagehead">
+    <div class="topbar">
+      <div class="brand">IMF <span>Drones</span></div>
+      <nav class="topnav" aria-label="Site">
+        <button type="button" class="link" data-go="landing">Home</button>
+        <button type="button" class="link" data-go="landing" data-then="levels">Build levels</button>
+        <button type="button" class="link" data-go="landing" data-then="pricing">Pricing</button>
+        <button type="button" class="link" data-go="curriculum">Curriculum</button>
+        <button type="button" class="link" data-go="quiz">Quizzes</button>
+      </nav>
+    </div>
+    <h1>CAD File Hub</h1>
+    <p class="sub">Pro kits arrive without a chassis. Choose your airframe and add-on parts by drone type, then print them yourself or through a print service.</p>
+  </div>
+
+  <main class="page">
+    <div class="tabs" id="hubTabs" aria-label="Drone type">
+      <button type="button" class="tab" data-tab="qc" aria-pressed="true">Quad-Copter</button>
+      <button type="button" class="tab" data-tab="fw" aria-pressed="false">Fixed Wing</button>
+      <button type="button" class="tab" data-tab="vtol" aria-pressed="false">VTOL</button>
+      <button type="button" class="tab" data-tab="uni" aria-pressed="false">Universal parts</button>
+    </div>
+    <p class="panel-intro" id="hubIntro" style="margin-bottom:24px"></p>
+
+    <div class="cadbox top">
+      <div>
+        <h3>Airframe CAD file<span class="amt" data-cad-price></span></h3>
+        <p>Buy the design on its own and print it yourself or through a print service. It is included with every Level 3 Pro kit. Use the lists below to choose add-on parts for your build.</p>
+      </div>
+    </div>
+
+    <div class="hub">
+      <div class="parts" id="parts"></div>
+      <aside class="buildlist" aria-label="My build list">
+        <h3>My build list</h3>
+        <p class="empty" id="blEmpty">Add parts to plan your build. Your list stays here while you browse.</p>
+        <ul id="blList"></ul>
+        <div class="btns">
+          <button type="button" id="blCopy" class="small">Copy list</button>
+          <button type="button" id="blClear" class="ghost small">Clear</button>
+        </div>
+        <p class="copynote" id="blNote" aria-live="polite"></p>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<!-- ============ CURRICULUM VIEW ============ -->
+<div id="currView" hidden>
+  <div class="on-band pagehead">
+    <div class="topbar">
+      <div class="brand">IMF <span>Drones</span></div>
+      <nav class="topnav" aria-label="Site">
+        <button type="button" class="link" data-go="landing">Home</button>
+        <button type="button" class="link" data-go="landing" data-then="levels">Build levels</button>
+        <button type="button" class="link" data-go="landing" data-then="pricing">Pricing</button>
+        <button type="button" class="link" data-go="curriculum">Curriculum</button>
+        <button type="button" class="link" data-go="landing" data-then="partners">Schools &amp; partners</button>
+      </nav>
+    </div>
+    <h1>Curriculum Template</h1>
+    <p class="sub">An outline of what to cover from 6th grade through college. Adapt it to your students, schedule and standards.</p>
+  </div>
+
+  <main class="page">
+    <div class="tabs" id="currTabs" aria-label="Grade level"></div>
+    <div id="currBody"></div>
+    <p class="currnote">This is a template to adapt. Align the topics with your state and district standards before use, and check current FAA and local rules before any flight, including the airspace restrictions around Washington, DC.</p>
+  </main>
+</div>
+
+<script>
+(function () {
+  var landing = document.getElementById("landing");
+  var quizView = document.getElementById("quizView");
+  var cadView = document.getElementById("cadView");
+  var currView = document.getElementById("currView");
+  var current = null;
+  var ROUTES = { quiz: "quiz", assembly: "quiz", cad: "cad", curriculum: "curriculum" };
+
+  /* ---------- Routing between landing, quizzes and CAD hub ---------- */
+  function setTab(name) {
+    var isA = name === "assembly";
+    document.getElementById("panel-quiz").hidden = isA;
+    document.getElementById("panel-assembly").hidden = !isA;
+    document.getElementById("tab-quiz").setAttribute("aria-selected", String(!isA));
+    document.getElementById("tab-assembly").setAttribute("aria-selected", String(isA));
+  }
+  function route(name) {
+    var which = ROUTES[name] || "landing";
+    landing.hidden = which !== "landing";
+    quizView.hidden = which !== "quiz";
+    cadView.hidden = which !== "cad";
+    currView.hidden = which !== "curriculum";
+    if (which === "quiz") setTab(name);
+    current = ROUTES[name] ? name : "landing";
+    window.scrollTo(0, 0);
+  }
+  function go(name, then) {
+    if (name !== current) route(name);
+    try {
+      var h = name === "landing" ? "" : name;
+      if (location.hash.slice(1) !== h) location.hash = h;
+    } catch (e) {}
+    if (then) {
+      var t = document.getElementById(then);
+      if (t) setTimeout(function () { t.scrollIntoView({ behavior: "smooth", block: "start" }); }, 0);
+    }
+  }
+  function fromHash() {
+    var n = location.hash.slice(1);
+    if (!ROUTES[n]) n = "landing";
+    if (n !== current) route(n);
+  }
+
+  document.addEventListener("click", function (e) {
+    var hubBtn = e.target.closest("[data-hub]");
+    if (hubBtn) { setHubTab(hubBtn.getAttribute("data-hub")); go("cad"); return; }
+    var goBtn = e.target.closest("[data-go]");
+    if (goBtn) { go(goBtn.getAttribute("data-go"), goBtn.getAttribute("data-then")); return; }
+    var scrollBtn = e.target.closest("[data-scroll]");
+    if (scrollBtn) {
+      var target = document.getElementById(scrollBtn.getAttribute("data-scroll"));
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+  window.addEventListener("hashchange", fromHash);
+
+  /* ---------- Pricing (US dollars) ---------- */
+  /* PRICE-START */
+  // Index 0 = Starter, 1 = Builder, 2 = Pro. Fixed wing costs more than quad-copter, VTOL more than fixed wing.
+  var PRICES = { qc: [199.99, 149.99, 124.99], fw: [239.99, 189.99, 164.99], vtol: [299.99, 249.99, 224.99] };
+  var CAD_PRICE = 24.99;
+  var BUNDLES = [{ drones: 5, price: 1499.99 }, { drones: 10, price: 2849.99 }, { drones: 20, price: 4999.99 }];
+  function money(n) { return "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  // Dollars at full size with the cents small and raised. A hidden "." keeps screen readers and copy/paste reading $199.99.
+  function priceHTML(n) {
+    var parts = n.toFixed(2).split(".");
+    return "$" + Number(parts[0]).toLocaleString("en-US") + '<span class="sr">.</span><sup class="c">' + parts[1] + "</sup>";
+  }
+  function priceFor(type, tier) { return PRICES[type][tier]; }
+  /* PRICE-END */
+
+  (function fillPrices() {
+    var tb = document.querySelector("#priceTable tbody");
+    [["qc", "Quad-Copter"], ["fw", "Fixed Wing"], ["vtol", "VTOL"]].forEach(function (t) {
+      var tr = document.createElement("tr");
+      var th = document.createElement("th");
+      th.scope = "row";
+      th.textContent = t[1];
+      tr.appendChild(th);
+      PRICES[t[0]].forEach(function (p) {
+        var td = document.createElement("td");
+        var s = document.createElement("strong");
+        s.innerHTML = priceHTML(p);
+        td.appendChild(s);
+        tr.appendChild(td);
+      });
+      tb.appendChild(tr);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-price-from]"), function (el) {
+      el.innerHTML = priceHTML(PRICES.qc[parseInt(el.getAttribute("data-price-from"), 10)]);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-cad-price]"), function (el) {
+      el.innerHTML = priceHTML(CAD_PRICE);
+    });
+    var host = document.getElementById("bundles");
+    BUNDLES.forEach(function (b) {
+      var card = document.createElement("article");
+      card.className = "bundle";
+      var size = document.createElement("p");
+      size.className = "size";
+      size.textContent = b.drones + " drones";
+      var amt = document.createElement("p");
+      amt.className = "amt";
+      amt.innerHTML = priceHTML(b.price);
+      var per = document.createElement("p");
+      per.className = "per";
+      per.textContent = "About $" + Math.round(b.price / b.drones) + " per drone";
+      var inc = document.createElement("p");
+      inc.className = "inc";
+      inc.textContent = "Includes the curriculum.";
+      card.appendChild(size);
+      card.appendChild(amt);
+      card.appendChild(per);
+      card.appendChild(inc);
+      host.appendChild(card);
+    });
+  })();
+
+  /* ---------- Quick kit quiz ---------- */
+  var form = document.getElementById("quiz");
+  var progress = document.getElementById("progress");
+  var errorEl = document.getElementById("error");
+  var result = document.getElementById("result");
+  var names = ["q1", "q2", "q3", "q4", "q5"];
+
+  var SCORE = {
+    q1: { yes: 3, no: 0 },
+    q3: { bob: 3, dresser: 2, picture: 1, none: 0 },
+    q4: { peter: 3, couple: 2, guy: 1, place: 1 },
+    q5: { family: 1, school: 1, library: 1, shop: 2 }
+  };
+  var TYPES = {
+    qc: { label: "Quad-Copter", short: "QC", blurb: "Four rotors, easy to hover and the most forgiving platform to learn on." },
+    fw: { label: "Fixed Wing", short: "FW", blurb: "Efficient long flights that glide like a plane, with more focus on wing and balance." },
+    h:  { label: "Hybrid", short: "H", blurb: "Lifts off like a copter and cruises like a plane, which adds more systems to assemble." }
+  };
+  var TIERS = [
+    { key: "Starter", text: "Snap-fit and plug and play. A guided first build with no soldering." },
+    { key: "Builder", text: "A pre-made chassis with light soldering of the plug-and-play joints and easy flight controller connections." },
+    { key: "Pro", text: "Components and wires with a CAD file for the chassis, and every connection soldered or crimped by you." }
+  ];
+  var TOOL_SOURCE = {
+    family: "your family or friend's workspace",
+    school: "your school's lab",
+    library: "your library's makerspace",
+    shop: "a nearby shop"
+  };
+
+  function get(f, name) {
+    var el = f.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : null;
+  }
+  function updateProgress() {
+    var n = names.filter(function (k) { return get(form, k) !== null; }).length;
+    progress.textContent = n + " of 5 answered";
+  }
+  function recommend(a) {
+    var points = SCORE.q1[a.q1] + SCORE.q3[a.q3] + SCORE.q4[a.q4] + SCORE.q5[a.q5];
+    var tier = points >= 8 ? 2 : points >= 4 ? 1 : 0;
+    var typeKey = a.q2 === "any" ? "qc" : a.q2;
+    var notes = [];
+    if (a.q2 === "any") notes.push("You said anything that flies, so we started you on the Quad-Copter, the easiest design to learn on.");
+    if (typeKey === "h" && tier === 0) {
+      tier = 1;
+      notes.push("Hybrids have more systems to assemble, so we moved you up to the Builder level to keep the build manageable.");
+    }
+    return { typeKey: typeKey, tier: tier, notes: notes };
+  }
+  function toolsMessage(a) {
+    var src = TOOL_SOURCE[a.q5];
+    if (a.q4 === "peter") return "Your own setup should cover this build. Check the parts list against what you have before you start.";
+    if (a.q4 === "couple") return "A couple of tools is a good start. Compare the build guide's tool list with yours, and borrow anything missing from " + src + ".";
+    if (a.q4 === "guy") return "Plan a visit to " + src + " before you start, and bring the build guide so you can use their tools in one trip.";
+    return "Plan your build sessions around " + src + ", where the tools are already available.";
+  }
+  function renderQuick(a) {
+    var r = recommend(a);
+    var type = TYPES[r.typeKey];
+    var tier = TIERS[r.tier];
+    document.getElementById("kitName").textContent = type.short + " " + tier.key + " Kit";
+    document.getElementById("kitLede").textContent = type.label + " drone. " + tier.text;
+    var chipList = document.getElementById("kitChips");
+    chipList.innerHTML = "";
+    [type.label + " (" + type.short + ")", tier.key + " level", a.q1 === "yes" ? "Has built a drone" : "First drone"].forEach(function (c) {
+      var li = document.createElement("li");
+      li.textContent = c;
+      chipList.appendChild(li);
+    });
+    var priceKey = r.typeKey === "h" ? "vtol" : r.typeKey;
+    document.getElementById("kitPrice").innerHTML = priceHTML(priceFor(priceKey, r.tier));
+    var pnote = (r.typeKey === "h" ? "Hybrid kits are priced as VTOL. " : "") + (a.q2 === "any" ? "Priced as a quad-copter. Fixed wing and VTOL kits cost more. " : "") + (r.tier === 2 ? "Includes the CAD file. The CAD file alone is " + priceHTML(CAD_PRICE) + "." : "Price in US dollars.");
+    document.getElementById("kitPriceNote").innerHTML = pnote.trim();
+    document.getElementById("whyText").textContent = (type.blurb + " " + r.notes.join(" ")).trim();
+    document.getElementById("toolsText").textContent = toolsMessage(a);
+    result.hidden = false;
+    result.scrollIntoView({ behavior: "smooth", block: "start" });
+    result.focus({ preventScroll: true });
+  }
+
+  form.addEventListener("change", function () {
+    updateProgress();
+    errorEl.textContent = "";
+    form.querySelectorAll("fieldset").forEach(function (f) {
+      if (get(form, f.getAttribute("data-q")) !== null) f.classList.remove("missing");
+    });
+  });
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var missing = names.filter(function (n) { return get(form, n) === null; });
+    form.querySelectorAll("fieldset").forEach(function (f) {
+      f.classList.toggle("missing", missing.indexOf(f.getAttribute("data-q")) !== -1);
+    });
+    if (missing.length) {
+      errorEl.textContent = missing.length === 1
+        ? "Answer the highlighted question to see your kit."
+        : "Answer the " + missing.length + " highlighted questions to see your kit.";
+      form.querySelector('fieldset[data-q="' + missing[0] + '"]').scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    errorEl.textContent = "";
+    var answers = {};
+    names.forEach(function (n) { answers[n] = get(form, n); });
+    renderQuick(answers);
+  });
+  document.getElementById("retake").addEventListener("click", function () {
+    form.reset();
+    result.hidden = true;
+    updateProgress();
+    document.getElementById("panel-quiz").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  /* ---------- In-depth assembly quiz ---------- */
+  var AQ = [
+    { id: "a_type", type: "radio", text: "What do you want to build?", opts: [["qc", "Quad-Copter"], ["fw", "Fixed Wing"], ["vtol", "VTOL"], ["any", "Not sure yet"]] },
+    { id: "a_iron", type: "radio", text: "Do you have a soldering iron?", opts: [["none", "No soldering iron"], ["basic", "Yes, a basic fixed-temperature iron"], ["station", "Yes, a temperature-controlled station"]] },
+    { id: "a_exp", type: "radio", text: "How much soldering have you done?", opts: [["0", "None yet"], ["1", "A few joints, like wires to a connector"], ["2", "Plenty, including small pads and wire-to-board joints"]] },
+    { id: "a_tools", type: "checkbox", text: "Which of these tools do you have?", hint: "Check everything that applies. You can leave all of them blank.", opts: [
+      ["drivers", "Precision screwdrivers and hex drivers"],
+      ["strip", "Wire strippers and cutters"],
+      ["supplies", "Solder, flux and a helping-hands or board holder"],
+      ["shrink", "Heat shrink and a heat gun or lighter"],
+      ["meter", "Multimeter"],
+      ["knife", "Hobby knife and small files"]
+    ] },
+    { id: "a_crimp", type: "radio", text: "Do you have a crimping tool?", opts: [["own", "Yes, and connectors to crimp"], ["borrow", "No, but I can borrow one"], ["none", "No"]] },
+    { id: "a_print", type: "radio", text: "Do you have a 3D printer?", opts: [["own", "Yes, my own"], ["access", "No, but I can use one at a school, library, makerspace or print service"], ["none", "No access"]] },
+    { id: "a_pc", type: "radio", text: "What will you use to configure the flight controller and radio?", opts: [["pc", "A laptop or desktop computer"], ["phone", "A phone or tablet only"], ["none", "I am not sure"]] },
+    { id: "a_charge", type: "radio", text: "How will you charge the battery?", opts: [["safe", "Balance charger and a fire-safe LiPo bag"], ["charger", "Balance charger, no fire-safe bag"], ["none", "I do not have a charger yet"]] },
+    { id: "a_space", type: "radio", text: "Where will you build?", opts: [["bench", "A dedicated bench with ventilation"], ["table", "A shared table I can set up and clear"], ["tight", "Limited space"]] }
+  ];
+  var aform = document.getElementById("aform");
+  var aprogress = document.getElementById("aprogress");
+  var aerror = document.getElementById("aerror");
+  var aresult = document.getElementById("aresult");
+  var requiredIds = AQ.filter(function (q) { return q.type === "radio"; }).map(function (q) { return q.id; });
+
+  AQ.forEach(function (q) {
+    var fs = document.createElement("fieldset");
+    fs.setAttribute("data-q", q.id);
+    var lg = document.createElement("legend");
+    lg.textContent = q.text;
+    fs.appendChild(lg);
+    if (q.hint) {
+      var hint = document.createElement("p");
+      hint.className = "hint";
+      hint.textContent = q.hint;
+      fs.appendChild(hint);
+    }
+    q.opts.forEach(function (o, i) {
+      var id = q.id + "-" + i;
+      var label = document.createElement("label");
+      label.className = "opt";
+      label.htmlFor = id;
+      var input = document.createElement("input");
+      input.type = q.type;
+      input.id = id;
+      input.name = q.id;
+      input.value = o[0];
+      var span = document.createElement("span");
+      span.textContent = o[1];
+      label.appendChild(input);
+      label.appendChild(span);
+      fs.appendChild(label);
+    });
+    document.getElementById("agrid").appendChild(fs);
+  });
+
+  /* PURE-START */
+  var LEVEL_NAMES = ["Starter", "Builder", "Pro"];
+  function assess(a) {
+    var has = function (t) { return a.tools.indexOf(t) !== -1; };
+    var core = [
+      [{ label: "Precision screwdrivers and hex drivers", ok: has("drivers") }],
+      [
+        { label: "A soldering iron", ok: a.iron !== "none" },
+        { label: "Solder, flux and a helping-hands or board holder", ok: has("supplies") },
+        { label: "Wire strippers and cutters", ok: has("strip") },
+        { label: "A little soldering practice (a few joints is enough)", ok: a.exp >= 1 }
+      ],
+      [
+        { label: "A temperature-controlled soldering station", ok: a.iron === "station" },
+        { label: "Comfortable soldering, including small pads", ok: a.exp >= 2 },
+        { label: "A multimeter to test connections", ok: has("meter") },
+        { label: "A crimping tool, owned or borrowed", ok: a.crimp !== "none" },
+        { label: "A 3D printer, or access to one or a print service", ok: a.print !== "none" },
+        { label: "A hobby knife and small files for cleaning printed parts", ok: has("knife") }
+      ]
+    ];
+    function missing(L) { return core[L].filter(function (r) { return !r.ok; }); }
+    var level = (missing(1).length === 0 && missing(2).length === 0) ? 2 : (missing(1).length === 0 ? 1 : 0);
+
+    var every = [
+      { label: "Precision screwdrivers and hex drivers", state: has("drivers") ? "have" : "need" },
+      { label: a.pc === "phone" ? "A computer to configure the flight controller and radio (a phone or tablet is not enough for most setup software)" : "A computer to configure the flight controller and radio", state: a.pc === "pc" ? "have" : "need" },
+      { label: a.charge === "charger" ? "A fire-safe LiPo bag for charging" : "A LiPo balance charger and a fire-safe bag", state: a.charge === "safe" ? "have" : (a.charge === "charger" ? "part" : "need") }
+    ];
+
+    var have = [];
+    for (var i = 1; i <= level; i++) {
+      core[i].forEach(function (r) { if (r.ok) have.push(r.label); });
+    }
+    var next = level < 2 ? missing(level + 1).map(function (r) { return r.label; }) : [];
+
+    var notes = [];
+    if (level >= 1 && a.space === "tight") notes.push("Soldering needs a ventilated spot and a heat-safe surface. Plan to set one up before you start.");
+    if (level >= 1 && a.space === "table") notes.push("Use a heat-safe mat and ventilate the room while you solder.");
+    if (level === 2 && a.print === "access") notes.push("Check print times with your school, library, makerspace or print service before you order your kit.");
+    if (level === 0 && next.length === 0) notes.push("You already have what Builder needs. Add precision screwdrivers and you can step up.");
+    if (level === 0 && a.exp === 0 && a.iron !== "none") notes.push("You have a soldering iron. Practice a few joints on scrap wire and you can move up to Builder.");
+    return { level: level, every: every, have: have, next: next, notes: notes };
+  }
+  /* PURE-END */
+
+  var LEVEL_TEXT = [
+    "Snap-fit and plug and play. Most of the chassis snaps together, a few screws hold the electronics, and every electrical connection is a plug. No soldering.",
+    "A pre-made chassis with light soldering. You solder the plug-and-play joints to the ESC and the easy joints that bring the FPV camera, VTX and ELRS receiver into the flight controller.",
+    "Components and wires with nothing soldered to any board, and a CAD file in place of a chassis. You print the airframe, add parts from the CAD hub and wire everything yourself."
+  ];
+  var TYPE_LABEL = { qc: "Quad-Copter", fw: "Fixed Wing", vtol: "VTOL", any: "Drone type open" };
+
+  function fillChecklist(id, items, stateOf, textOf) {
+    var ul = document.getElementById(id);
+    ul.innerHTML = "";
+    items.forEach(function (it) {
+      var li = document.createElement("li");
+      var st = document.createElement("span");
+      var state = stateOf(it);
+      st.className = "st " + state;
+      st.textContent = state === "have" ? "Have" : state === "part" ? "Almost" : "Need";
+      var tx = document.createElement("span");
+      tx.textContent = textOf(it);
+      li.appendChild(st);
+      li.appendChild(tx);
+      ul.appendChild(li);
+    });
+  }
+
+  function renderAssembly(raw) {
+    var a = {
+      type: raw.a_type,
+      iron: raw.a_iron,
+      exp: parseInt(raw.a_exp, 10),
+      tools: raw.a_tools,
+      crimp: raw.a_crimp,
+      print: raw.a_print,
+      pc: raw.a_pc,
+      charge: raw.a_charge,
+      space: raw.a_space
+    };
+    var r = assess(a);
+    var name = LEVEL_NAMES[r.level];
+    document.getElementById("aName").textContent = "Level " + (r.level + 1) + " · " + name;
+    document.getElementById("aLede").textContent = LEVEL_TEXT[r.level];
+
+    var chips = document.getElementById("aChips");
+    chips.innerHTML = "";
+    [TYPE_LABEL[a.type], name + " build", r.level === 0 ? "No soldering" : r.level === 1 ? "Light soldering" : "Full build"].forEach(function (c) {
+      var li = document.createElement("li");
+      li.textContent = c;
+      chips.appendChild(li);
+    });
+
+    fillChecklist("aEvery", r.every, function (x) { return x.state; }, function (x) { return x.label; });
+
+    var haveBox = document.getElementById("aHave");
+    document.getElementById("aHaveTitle").textContent = r.level === 0 ? "Your starting point" : "What qualifies you";
+    if (r.have.length) {
+      fillChecklist("aHave", r.have, function () { return "have"; }, function (x) { return x; });
+    } else {
+      haveBox.innerHTML = "";
+      var li = document.createElement("li");
+      li.textContent = "Starter needs no soldering tools. Everything above is all you need to begin.";
+      haveBox.appendChild(li);
+    }
+
+    var nextBox = document.getElementById("aNextBox");
+    if (r.level < 2) {
+      nextBox.hidden = false;
+      document.getElementById("aNextTitle").textContent = "To step up to " + LEVEL_NAMES[r.level + 1];
+      if (r.next.length) {
+        fillChecklist("aNext", r.next, function () { return "need"; }, function (x) { return x; });
+      } else {
+        document.getElementById("aNext").innerHTML = "";
+        var li2 = document.createElement("li");
+        li2.textContent = "Nothing else. You meet the requirements for " + LEVEL_NAMES[r.level + 1] + ".";
+        document.getElementById("aNext").appendChild(li2);
+      }
+    } else {
+      nextBox.hidden = true;
+    }
+
+    var aKey = a.type === "any" ? "qc" : a.type;
+    document.getElementById("aPrice").innerHTML = priceHTML(priceFor(aKey, r.level));
+    var aNote = (a.type === "any" ? "Priced as a quad-copter. Fixed wing and VTOL kits cost more. " : "") + (r.level === 2 ? "Includes the CAD file. The CAD file alone is " + priceHTML(CAD_PRICE) + "." : "Price in US dollars.");
+    document.getElementById("aPriceNote").innerHTML = aNote.trim();
+    document.getElementById("aNotes").textContent = r.notes.join(" ");
+    var hubBtn = document.getElementById("aHub");
+    hubBtn.setAttribute("data-hub", a.type === "any" ? "qc" : a.type);
+    hubBtn.hidden = r.level < 2;
+
+    aresult.hidden = false;
+    aresult.scrollIntoView({ behavior: "smooth", block: "start" });
+    aresult.focus({ preventScroll: true });
+  }
+
+  function readAssembly() {
+    var out = {};
+    AQ.forEach(function (q) {
+      if (q.type === "checkbox") {
+        out[q.id] = Array.prototype.map.call(aform.querySelectorAll('input[name="' + q.id + '"]:checked'), function (el) { return el.value; });
+      } else {
+        out[q.id] = get(aform, q.id);
+      }
+    });
+    return out;
+  }
+  function updateAProgress() {
+    var n = requiredIds.filter(function (k) { return get(aform, k) !== null; }).length;
+    aprogress.textContent = n + " of " + requiredIds.length + " answered";
+  }
+  aform.addEventListener("change", function () {
+    updateAProgress();
+    aerror.textContent = "";
+    aform.querySelectorAll("fieldset").forEach(function (f) {
+      var id = f.getAttribute("data-q");
+      if (requiredIds.indexOf(id) !== -1 && get(aform, id) !== null) f.classList.remove("missing");
+    });
+  });
+  aform.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var missing = requiredIds.filter(function (k) { return get(aform, k) === null; });
+    aform.querySelectorAll("fieldset").forEach(function (f) {
+      f.classList.toggle("missing", missing.indexOf(f.getAttribute("data-q")) !== -1);
+    });
+    if (missing.length) {
+      aerror.textContent = missing.length === 1
+        ? "Answer the highlighted question to see your level."
+        : "Answer the " + missing.length + " highlighted questions to see your level.";
+      aform.querySelector('fieldset[data-q="' + missing[0] + '"]').scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    aerror.textContent = "";
+    renderAssembly(readAssembly());
+  });
+  document.getElementById("aretake").addEventListener("click", function () {
+    aform.reset();
+    aresult.hidden = true;
+    updateAProgress();
+    document.getElementById("panel-assembly").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  /* ---------- Curriculum template ---------- */
+  var CURR = [
+    {
+      tab: "Grades 6–8", title: "Middle school: build it, fly it, explain it", kit: "Level 1 Starter · quad-copter",
+      goal: "Students build a snap-fit drone, fly it safely and explain in plain language how it works.",
+      strands: [
+        { name: "Safety and airspace", pts: [
+          "Flight safety rules and a pre-flight checklist",
+          "Safe handling, charging and storage of LiPo batteries",
+          "Where it is and is not legal to fly, including why airspace around Washington, DC is restricted",
+          "Respecting people, privacy and property" ] },
+        { name: "Science and math", pts: [
+          "The four forces of flight: lift, weight, thrust and drag",
+          "How propellers create thrust (Newton's third law)",
+          "Measuring distance, time and speed, with metric units and conversions",
+          "Collecting and graphing flight data, such as battery level against flight time" ] },
+        { name: "Engineering and building", pts: [
+          "The engineering design process: ask, imagine, plan, build, test, improve",
+          "Parts of a drone and what each does: frame, motors, propellers, flight controller, ESC, battery, receiver",
+          "Following build instructions, snap-fit assembly and safe use of hand tools",
+          "Testing, troubleshooting and keeping a build journal" ] },
+        { name: "Electronics and programming", pts: [
+          "Simple circuits: power, current, connectors and why polarity matters",
+          "Plug-and-play connections between battery, ESC and motors",
+          "Sequencing: planning a flight path as step-by-step instructions" ] },
+        { name: "Flying skills", pts: [
+          "Simulator practice before real flight",
+          "Hover, forward flight, turns and landing",
+          "Indoor or tethered flights, then a supervised outdoor session" ] },
+        { name: "Projects and assessment", pts: [
+          "Team build of a Starter drone",
+          "Obstacle course flight challenge",
+          "Short presentation on how our drone works",
+          "Assess with the build journal, a pre-flight checklist sign-off and a flight skills rubric" ] }
+      ]
+    },
+    {
+      tab: "Grades 9–10", title: "High school I: systems, soldering and setup", kit: "Level 1–2 · Starter to Builder",
+      goal: "Students understand the systems on a drone, make their first soldered joints and set up a basic flight configuration.",
+      strands: [
+        { name: "Safety and airspace", pts: [
+          "Soldering safety, ventilation and hot-surface rules",
+          "FAA rules for recreational flyers",
+          "Checking airspace maps before every flight",
+          "Battery storage, charging and fire safety" ] },
+        { name: "Science and math", pts: [
+          "Newton's laws applied to flight",
+          "Torque, and why neighboring motors spin in opposite directions",
+          "Voltage, current, resistance and power (Ohm's law)",
+          "Battery capacity (mAh) and estimating flight time",
+          "Graphing and analyzing test data" ] },
+        { name: "Engineering and building", pts: [
+          "Systems view: how frame, power, control and radio fit together",
+          "Materials, and weight against strength",
+          "Soldering technique: tinning, clean joints and heat shrink",
+          "Testing continuity and voltage with a multimeter",
+          "Documenting wiring and build steps" ] },
+        { name: "Electronics and programming", pts: [
+          "Roles of the flight controller, ESC and receiver",
+          "Binding an ELRS receiver and setting up the radio link",
+          "Configuring a flight controller with setup software",
+          "Sensors: gyroscope and accelerometer",
+          "First steps in text-based coding with sensor data" ] },
+        { name: "Flying skills", pts: [
+          "Flight modes and when to use each",
+          "FPV basics in a simulator",
+          "Camera and VTX setup for first-person view" ] },
+        { name: "Projects and assessment", pts: [
+          "Build a Builder-level drone",
+          "Controlled test: how propeller size or battery choice changes flight time",
+          "Written lab report with graphs" ] }
+      ]
+    },
+    {
+      tab: "Grades 11–12", title: "High school II: design, print and tune", kit: "Level 2–3 · Builder to Pro",
+      goal: "Students design, print, wire and tune a drone from components and a CAD file.",
+      strands: [
+        { name: "Safety and airspace", pts: [
+          "Risk assessment before each flight operation",
+          "Overview of Part 107 rules for commercial flying and when they apply",
+          "Inspecting solder and crimp joints before powering up",
+          "LiPo storage, transport and disposal" ] },
+        { name: "Science and math", pts: [
+          "Lift, drag and angle of attack",
+          "Thrust-to-weight ratio and matching motor, propeller and battery",
+          "Wing loading and stability for fixed wing aircraft",
+          "Energy use and efficiency",
+          "Statistics and error analysis for test data" ] },
+        { name: "Engineering and building", pts: [
+          "CAD basics: sketches, extrusions and assemblies",
+          "Designing for 3D printing: orientation, infill and tolerances",
+          "Planning wiring layouts, soldering and crimping connectors",
+          "Weight, balance and center of gravity",
+          "Improving a design from test results" ] },
+        { name: "Electronics and programming", pts: [
+          "PID tuning and what each term does",
+          "Reading flight logs to find problems",
+          "Failsafe settings and telemetry",
+          "Python for analyzing flight data",
+          "Comparing control of quad-copters, fixed wing and VTOL aircraft" ] },
+        { name: "Flying skills", pts: [
+          "Tuning flights and trimming",
+          "Mission flights with set goals",
+          "Fixed wing basics if building a wing: launch, trim, stalls and landing" ] },
+        { name: "Projects and assessment", pts: [
+          "Pro build from components and a CAD file",
+          "Design report with CAD drawings and test data",
+          "Live demonstration and Q&A" ] }
+      ]
+    },
+    {
+      tab: "College: Intro", title: "Introduction to unmanned aircraft systems", kit: "Level 3 Pro · any drone type",
+      goal: "Students apply engineering fundamentals to a complete unmanned aircraft system (UAS).",
+      strands: [
+        { name: "Safety and regulations", pts: [
+          "Preparing for the FAA Part 107 remote pilot exam",
+          "Airspace classes, authorizations and waivers",
+          "Operational risk management and checklists",
+          "Ethics, privacy and data responsibility" ] },
+        { name: "Science and math", pts: [
+          "Flight mechanics and stability",
+          "Propulsion modeling and battery energy density",
+          "Calculus-based models of motion",
+          "Measurement uncertainty and data analysis" ] },
+        { name: "Engineering and building", pts: [
+          "Systems engineering: requirements, trade studies and verification",
+          "Materials selection and structural basics",
+          "From CAD to manufacture, including simple stress analysis",
+          "Integration and test planning" ] },
+        { name: "Electronics and programming", pts: [
+          "Microcontrollers and embedded systems",
+          "Sensors and an introduction to sensor fusion",
+          "Feedback control and PID design",
+          "Communication links and protocols",
+          "Python or C++ for control and data, and open-source autopilot software such as ArduPilot or PX4" ] },
+        { name: "Flying skills", pts: [
+          "Autonomous waypoint missions",
+          "Mission planning and pre-flight briefings",
+          "Comparing multirotor, fixed wing and VTOL configurations" ] },
+        { name: "Projects and assessment", pts: [
+          "Team project built from a requirements document",
+          "Test plan and flight test report",
+          "Peer design review" ] }
+      ]
+    },
+    {
+      tab: "College: Advanced", title: "Advanced UAS design and flight test", kit: "Level 3 Pro · fixed wing or VTOL",
+      goal: "Students design, analyze and flight-test a vehicle for a defined mission.",
+      strands: [
+        { name: "Safety and regulations", pts: [
+          "Flight test safety plans and range procedures",
+          "Airworthiness and failure mode analysis",
+          "Regulatory paths for operations beyond visual line of sight",
+          "Data security and responsible use" ] },
+        { name: "Science and math", pts: [
+          "Advanced aerodynamics and an introduction to computational fluid dynamics",
+          "Dynamics and state-space control models",
+          "System identification from flight data",
+          "Optimizing weight, range and endurance" ] },
+        { name: "Engineering and building", pts: [
+          "VTOL transition design, such as tilt-rotor and quad-plane layouts",
+          "Structural analysis, composites and advanced printed structures",
+          "Reliability, redundancy and failure analysis",
+          "Formal design reviews: preliminary and critical" ] },
+        { name: "Electronics and programming", pts: [
+          "Custom flight code on an open-source autopilot",
+          "Integrating GPS, lidar and camera payloads",
+          "Computer vision for navigation and inspection tasks",
+          "Real-time embedded software and telemetry" ] },
+        { name: "Flying skills", pts: [
+          "A planned flight test campaign with data review between flights",
+          "Autonomous mission execution",
+          "Data-driven iteration of the design" ] },
+        { name: "Projects and assessment", pts: [
+          "Mission-driven capstone for a real or simulated client",
+          "Design reviews, flight test data and a final technical paper",
+          "Poster or public demonstration" ] }
+      ]
+    }
+  ];
+  var currTab = 0;
+  function mk(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text) e.textContent = text;
+    return e;
+  }
+  function setCurrTab(i) {
+    currTab = i;
+    Array.prototype.forEach.call(document.querySelectorAll("#currTabs .tab"), function (b, idx) {
+      b.setAttribute("aria-pressed", String(idx === i));
+    });
+    var c = CURR[i];
+    var body = document.getElementById("currBody");
+    body.innerHTML = "";
+    var chips = mk("div", "currhead");
+    chips.appendChild(mk("span", "pill kind", c.tab));
+    chips.appendChild(mk("span", "pill", "Suggested kit: " + c.kit));
+    body.appendChild(chips);
+    body.appendChild(mk("h2", "currtitle", c.title));
+    body.appendChild(mk("p", "goal", c.goal));
+    var grid = mk("div", "strands");
+    c.strands.forEach(function (s) {
+      var card = mk("section", "strand");
+      card.appendChild(mk("h3", "", s.name));
+      var ul = mk("ul");
+      s.pts.forEach(function (p) { ul.appendChild(mk("li", "", p)); });
+      card.appendChild(ul);
+      grid.appendChild(card);
+    });
+    body.appendChild(grid);
+  }
+  CURR.forEach(function (c, i) {
+    var b = mk("button", "tab", c.tab);
+    b.type = "button";
+    b.setAttribute("aria-pressed", "false");
+    b.addEventListener("click", function () { setCurrTab(i); });
+    document.getElementById("currTabs").appendChild(b);
+  });
+
+  /* ---------- CAD hub ---------- */
+  // Add a `file` path (for example "cad/quad-5in-frame.step") to an entry once the real file is published with the page.
+  var HUB = {
+    qc: { label: "Quad-Copter", intro: "Airframes and add-ons for quad-copters. Pro kits ship without a chassis, so pick a frame first, then add what you need.", items: [
+      { id: "qc-5in", name: "5-inch freestyle frame", kind: "Chassis", fits: "Pro", desc: "Complete chassis for 5-inch propellers, with room for a standard flight controller stack." },
+      { id: "qc-3in", name: "3-inch lightweight frame", kind: "Chassis", fits: "Pro", desc: "A compact chassis for small, quick quad-copters and tighter flying spaces." },
+      { id: "qc-cam", name: "Adjustable FPV camera mount", kind: "Add-on", fits: "Builder · Pro", desc: "Tilt-adjustable mount for a standard FPV camera." },
+      { id: "qc-guard", name: "Prop guards", kind: "Add-on", fits: "Builder · Pro", desc: "Protective rings that shield the propellers during early flights and indoor sessions." },
+      { id: "qc-top", name: "Top battery plate with strap slots", kind: "Add-on", fits: "Pro", desc: "Holds the battery on top of the frame with a strap." }
+    ] },
+    fw: { label: "Fixed Wing", intro: "Airframes and add-ons for fixed wing aircraft, from beginner trainers to flying wings.", items: [
+      { id: "fw-wing", name: "Flying wing airframe", kind: "Chassis", fits: "Pro", desc: "A simple, stable flying wing with a compartment for the electronics." },
+      { id: "fw-trainer", name: "Trainer fuselage and wing set", kind: "Chassis", fits: "Pro", desc: "A traditional layout with forgiving flight behavior for first fixed wing builds." },
+      { id: "fw-servo", name: "Servo tray", kind: "Add-on", fits: "Builder · Pro", desc: "Mounting tray that holds control surface servos in place." },
+      { id: "fw-pod", name: "Nose camera pod", kind: "Add-on", fits: "Builder · Pro", desc: "A front-mounted pod that keeps the FPV camera protected and aimed forward." },
+      { id: "fw-tail", name: "Tail boom and tail surfaces", kind: "Add-on", fits: "Pro", desc: "Replaceable tail parts for repairs and layout changes." }
+    ] },
+    vtol: { label: "VTOL", intro: "Parts for vertical takeoff and landing aircraft that lift like a copter and cruise like a plane.", items: [
+      { id: "vt-boom", name: "Quad-plane boom set", kind: "Chassis", fits: "Pro", desc: "Booms that carry the lift rotors on a fixed wing airframe." },
+      { id: "vt-tilt", name: "Tilt-rotor motor bracket", kind: "Add-on", fits: "Pro", desc: "Bracket that lets a motor rotate between lift and cruise positions." },
+      { id: "vt-push", name: "Pusher motor mount", kind: "Add-on", fits: "Builder · Pro", desc: "Rear mount for the forward-flight motor." },
+      { id: "vt-gear", name: "Landing gear set", kind: "Add-on", fits: "Builder · Pro", desc: "Legs that protect the underside during vertical landings." }
+    ] },
+    uni: { label: "Universal parts", intro: "Parts that fit any drone type. Print the ones your build needs and add them to your list.", items: [
+      { id: "un-stack", name: "Flight controller stack mount", kind: "Mount", fits: "Any level", desc: "Standoff-style mounts for 30.5 × 30.5 mm and 20 × 20 mm stacks." },
+      { id: "un-elrs", name: "ELRS receiver holder", kind: "Mount", fits: "Any level", desc: "Keeps the ELRS receiver and its antenna secured and protected." },
+      { id: "un-vtx", name: "VTX and antenna mount", kind: "Mount", fits: "Any level", desc: "Holds the video transmitter and points its antenna clear of the frame." },
+      { id: "un-batt", name: "Battery plate for XT30 and XT60 leads", kind: "Mount", fits: "Any level", desc: "Battery seat with a channel for the lead." },
+      { id: "un-gps", name: "GPS mast", kind: "Mount", fits: "Any level", desc: "Lifts the GPS module above the frame for a cleaner signal." },
+      { id: "un-action", name: "Action camera mount", kind: "Mount", fits: "Any level", desc: "Carries a small action camera for recording flights." }
+    ] }
+  };
+  var hubTab = "qc";
+  var selected = {}; // id -> { name, kind, group }
+
+  function setHubTab(key) {
+    if (!HUB[key]) key = "qc";
+    hubTab = key;
+    Array.prototype.forEach.call(document.querySelectorAll("#hubTabs .tab"), function (b) {
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-tab") === key));
+    });
+    document.getElementById("hubIntro").textContent = HUB[key].intro;
+    renderParts();
+  }
+  function renderParts() {
+    var host = document.getElementById("parts");
+    host.innerHTML = "";
+    HUB[hubTab].items.forEach(function (it) {
+      var card = document.createElement("article");
+      card.className = "part";
+
+      var h = document.createElement("h3");
+      h.textContent = it.name;
+      var meta = document.createElement("div");
+      meta.className = "meta";
+      var p1 = document.createElement("span");
+      p1.className = "pill kind";
+      p1.textContent = it.kind;
+      var p2 = document.createElement("span");
+      p2.className = "pill";
+      p2.textContent = it.fits;
+      meta.appendChild(p1);
+      meta.appendChild(p2);
+      var d = document.createElement("p");
+      d.textContent = it.desc;
+
+      var row = document.createElement("div");
+      row.className = "row";
+      var file;
+      if (it.file) {
+        file = document.createElement("a");
+        file.href = it.file;
+        file.target = "_blank";
+        file.rel = "noopener";
+        file.textContent = "Open CAD file";
+      } else {
+        file = document.createElement("span");
+        file.textContent = "File coming soon";
+      }
+      file.className = "file";
+      var btn = document.createElement("button");
+      btn.type = "button";
+      var on = !!selected[it.id];
+      btn.setAttribute("aria-pressed", String(on));
+      btn.textContent = on ? "Added" : "Add to list";
+      btn.addEventListener("click", function () {
+        if (selected[it.id]) delete selected[it.id];
+        else selected[it.id] = { name: it.name, kind: it.kind, group: HUB[hubTab].label, order: Object.keys(selected).length };
+        renderParts();
+        renderList();
+      });
+      row.appendChild(file);
+      row.appendChild(btn);
+
+      card.appendChild(h);
+      card.appendChild(meta);
+      card.appendChild(d);
+      card.appendChild(row);
+      host.appendChild(card);
+    });
+  }
+  function renderList() {
+    var ids = Object.keys(selected);
+    var ul = document.getElementById("blList");
+    ul.innerHTML = "";
+    document.getElementById("blEmpty").hidden = ids.length > 0;
+    document.getElementById("blCopy").hidden = ids.length === 0;
+    document.getElementById("blClear").hidden = ids.length === 0;
+    ids.forEach(function (id) {
+      var s = selected[id];
+      var li = document.createElement("li");
+      var tx = document.createElement("span");
+      tx.textContent = s.name;
+      var sm = document.createElement("small");
+      sm.textContent = s.group + " · " + s.kind;
+      tx.appendChild(sm);
+      var rm = document.createElement("button");
+      rm.type = "button";
+      rm.className = "ghost";
+      rm.textContent = "Remove";
+      rm.setAttribute("aria-label", "Remove " + s.name);
+      rm.addEventListener("click", function () {
+        delete selected[id];
+        renderParts();
+        renderList();
+      });
+      li.appendChild(tx);
+      li.appendChild(rm);
+      ul.appendChild(li);
+    });
+  }
+  function listText() {
+    var lines = ["IMF Drones build list"];
+    Object.keys(selected).forEach(function (id) {
+      var s = selected[id];
+      lines.push("- " + s.group + ": " + s.name + " (" + s.kind + ")");
+    });
+    return lines.join("\n");
+  }
+  document.getElementById("hubTabs").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-tab]");
+    if (b) setHubTab(b.getAttribute("data-tab"));
+  });
+  document.getElementById("blClear").addEventListener("click", function () {
+    selected = {};
+    document.getElementById("blNote").textContent = "";
+    renderParts();
+    renderList();
+  });
+  document.getElementById("blCopy").addEventListener("click", function () {
+    var note = document.getElementById("blNote");
+    var text = listText();
+    function fallback() {
+      var ul = document.getElementById("blList");
+      var range = document.createRange();
+      range.selectNodeContents(ul);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      note.textContent = "Copy is blocked here. The list is selected, so press Ctrl+C or Cmd+C.";
+    }
+    try {
+      navigator.clipboard.writeText(text).then(function () {
+        note.textContent = "List copied.";
+      }, fallback);
+    } catch (err) { fallback(); }
+  });
+
+  setHubTab("qc");
+  setCurrTab(0);
+  renderList();
+  updateProgress();
+  updateAProgress();
+  fromHash();
+})();
+</script>
+
+</body>
+</html>
