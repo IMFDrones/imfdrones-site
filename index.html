@@ -572,6 +572,7 @@ sup.c { font-size: .55em; font-weight: 700; line-height: 0; vertical-align: supe
 
         <div class="actions">
           <p class="error" id="error" role="alert"></p>
+          <div class="cf-turnstile" data-sitekey="PASTE_YOUR_SITE_KEY_HERE"></div>
           <button type="submit" id="submit">Submit</button>
         </div>
       </form>
@@ -902,7 +903,26 @@ sup.c { font-size: .55em; font-weight: 700; line-height: 0; vertical-align: supe
     result.scrollIntoView({ behavior: "smooth", block: "start" });
     result.focus({ preventScroll: true });
   }
+  
+  var quizId = crypto.randomUUID();
 
+  function saveQuiz(answers, matchedKit, matchRule) {
+    var tokenInput = document.querySelector('[name="cf-turnstile-response"]');
+    var token = tokenInput ? tokenInput.value : "";
+    fetch("https://api.imfdrones.com", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        quizId: quizId,
+        answers: answers,
+        matchedKit: matchedKit,
+        matchRule: matchRule,
+        turnstileToken: token
+      })
+    }).catch(function () {});
+    if (window.turnstile) turnstile.reset();
+  }
+  
   form.addEventListener("change", function () {
     updateProgress();
     errorEl.textContent = "";
@@ -923,13 +943,16 @@ sup.c { font-size: .55em; font-weight: 700; line-height: 0; vertical-align: supe
       form.querySelector('fieldset[data-q="' + missing[0] + '"]').scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
-    errorEl.textContent = "";
+      errorEl.textContent = "";
     var answers = {};
     names.forEach(function (n) { answers[n] = get(form, n); });
     renderQuick(answers);
+    var r = recommend(answers);
+    saveQuiz(answers, document.getElementById("kitName").textContent, "tier " + r.tier + ", type " + r.typeKey);
   });
   document.getElementById("retake").addEventListener("click", function () {
-    form.reset();
+    quizId = crypto.randomUUID();
+      form.reset();
     result.hidden = true;
     updateProgress();
     document.getElementById("panel-quiz").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1571,6 +1594,9 @@ sup.c { font-size: .55em; font-weight: 700; line-height: 0; vertical-align: supe
   fromHash();
 })();
 </script>
+</script>
+<script src="https://challenges.cloufdare.com/turnstile/v0/api.js" async defer></script>
+</body>
 
 </body>
 </html>
